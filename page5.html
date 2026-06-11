@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2-6特設サイト - 展示案内</title>
+    <style>
+        /* 初期の正常なスタイル（徐々にJavaScriptで書き換えます） */
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #333333;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* サイト全体の長さを確保するコンテナ */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px 30vh 20px; /* 下部に大きな余白 */
+            box-sizing: border-box;
+        }
+
+        /* 最初の正常なセクション */
+        .normal-section {
+            line-height: 1.8;
+            margin-bottom: 100px;
+        }
+        .normal-section h1 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        /* 徐々にバグっていくセクション */
+        .glitch-section {
+            font-size: 20px;
+            letter-spacing: 4px;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+        .glitch-text {
+            margin-bottom: 150px;
+            opacity: 0.8;
+            transition: transform 0.1s ease, font-size 0.3s ease;
+        }
+
+        /* 誘導メッセージ */
+        .scroll-lead {
+            text-align: center;
+            font-size: 16px;
+            color: #888;
+            margin: 100px 0;
+        }
+
+        /* ーーー ここからジャンプスケア用スタイル ーーー */
+        #scare-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background-color: #000000;
+            z-index: 9999;
+            
+            /* 背景画像（お化け）の設定 */
+            /* ※画像がなくても動くよう、中央配置とカバーサイズを設定 */
+            background-image: url('obake.png'); 
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: contain; 
+        }
+
+        /* 画面いっぱいに表示される恐怖テキスト */
+        .scare-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 70px; /* 特大サイズ */
+            white-space: nowrap;
+            text-shadow: 0px 0px 20px #000;
+            text-align: center;
+        }
+
+        /* 超激しい点滅（白・黒・赤） */
+        @keyframes hardcore-flash {
+            0% { background-color: #ff0000; }
+            33% { background-color: #000000; }
+            66% { background-color: #ffffff; }
+            100% { background-color: #ff0000; }
+        }
+        .jumpscare-active {
+            animation: hardcore-flash 0.05s infinite; /* 0.05秒周期で超高速点滅 */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="main-content">
+        <div class="normal-section">
+            <h1>校内文化祭特設ページ</h1>
+            <p>本日は文化祭にお越しいただきありがとうございます。各教室では様々な展示や模擬店が開催されています。パンフレットをご確認の上、どうぞご自由にお回りください。</p>
+            <p>※落とし物、迷子などの際はお近くの実行委員、または体育館横の総本部までお越しください。</p>
+        </div>
+
+        <div class="scroll-lead">
+            <p>↓ スクロールして次を読み込む ↓</p>
+        </div>
+
+        <div class="glitch-section">
+            <p class="glitch-text">じじじ…じじ……</p>
+            <p class="glitch-text">縺ゅ縺励縺ｿ縺､縺代◆縺</p>
+            <p class="glitch-text">じじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじ</p>
+            <p class="glitch-text">縺ｿ縺､縺代◆縺ｿ縺､縺代◆縺ｿ縺､縺代◆縺ｿ縺､縺代◆</p>
+            <p class="glitch-text">うしろじじじ後ろじじうしバグじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじじ</p>
+            <p class="glitch-text" style="text-align: center;">もう逃げられないじじじじじじじじじじじじじじじじ</p>
+        </div>
+    </div>
+
+    <div id="scare-overlay">
+        <div class="scare-text">みつかった</div>
+    </div>
+
+    <audio id="scare-sound" src="scream.mp3" preload="auto"></audio>
+
+    <script>
+        let triggered = false;
+        const overlay = document.getElementById('scare-overlay');
+        const sound = document.getElementById('scare-sound');
+        const glitchTexts = document.querySelectorAll('.glitch-text');
+
+        window.addEventListener('scroll', function() {
+            // 現在のスクロール全体の進捗率（0〜1）を計算
+            let maxScroll = document.body.offsetHeight - window.innerHeight;
+            let scrollPercent = window.scrollY / maxScroll;
+
+            // 1. スクロールに応じて背景を徐々に黒く、文字を徐々に赤くする
+            // 背景色：白(255,255,255) から 黒(0,0,0) へ
+            let bgVal = Math.floor(255 * (1 - scrollPercent));
+            document.body.style.backgroundColor = `rgb(${bgVal}, ${bgVal}, ${bgVal})`;
+            
+            // 文字色：グレー(51,51,51) から 赤(255,0,0) へ
+            let textR = Math.floor(51 + (204 * scrollPercent));
+            let textG = Math.floor(51 * (1 - scrollPercent));
+            let textB = Math.floor(51 * (1 - scrollPercent));
+            document.body.style.color = `rgb(${textR}, ${textG}, ${textB})`;
+
+            // 2. スクロールに応じて後半の「じじじ」テキストを徐々に巨大化＆震えさせる
+            glitchTexts.forEach((text) => {
+                let baseSize = 20; // 初期サイズ
+                let newSize = baseSize + (scrollPercent * 30); // 最大+30pxまで大きく
+                text.style.fontSize = `${newSize}px`;
+
+                // スクロールが後半（50%以上）に達したらガタガタ震わせる
+                if (scrollPercent > 0.5) {
+                    let shakeX = (Math.random() - 0.5) * (scrollPercent * 15);
+                    let shakeY = (Math.random() - 0.5) * (scrollPercent * 15);
+                    text.style.transform = `translate(${shakeX}px, ${shakeY}px)`;
+                }
+            });
+
+            // 3. 最下部（残り20px以下）に到達したらジャンプスケア発動
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 20) {
+                if (!triggered) {
+                    triggered = true;
+                    triggerJumpScare();
+                }
+            }
+        });
+
+        function triggerJumpScare() {
+            // オーバーレイ（画像とお化けテキスト）を表示
+            overlay.style.display = 'block';
+            overlay.classList.add('jumpscare-active');
+
+            // 大音量で音声を再生
+            sound.volume = 1.0; // 音量を最大に設定
+            sound.play().catch(e => {
+                console.log("ブラウザの制限により音声の自動再生がブロックされました。画面タップ等の操作が必要です。");
+            });
+
+            // 強烈なバイブレーション（スマホ用）
+            if (navigator.vibrate) {
+                navigator.vibrate([500, 100, 500, 100, 1000]);
+            }
+        }
+    </script>
+</body>
+</html>
