@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>繧ｨ繝ｩ繝ｼ</title>
+    <style>
+        html, body {
+            background-color: #000000;
+            color: #ff0000;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        .scroller {
+            height: 150vh; /* スクロールさせるために縦幅を長く確保 */
+            font-size: 18px;
+            letter-spacing: 5px;
+            word-break: break-all;
+            opacity: 0.7;
+        }
+        /* 最後に飛び出す恐怖メッセージ（初期状態は非表示） */
+        #scare-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ff0000;
+            color: #000000;
+            font-weight: bold;
+            font-size: 40px;
+            text-align: center;
+            line-height: 100vh;
+            z-index: 9999;
+        }
+        /* 画面フラッシュのアニメーション */
+        @keyframes flash {
+            0% { background-color: #ff0000; color: #000; }
+            50% { background-color: #000000; color: #fff; }
+            100% { background-color: #ff0000; color: #000; }
+        }
+        .jumpscare-active {
+            animation: flash 0.2s infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scroller">
+        <p>縺ゅ縺励縺ｿ縺､縺代◆縺</p>
+        <p>縺ｿ縺､縺代◆縺ｿ縺､縺代◆</p>
+        <p>縺 industrial 縺 縺 縺 縺 縺</p>
+        <br><br><br><br><br>
+        <p style="text-align: center; font-size: 14px; color: #444;">↓ 下へスクロールして確認 ↓</p>
+    </div>
+
+    <div id="scare-overlay">つ ぎ は お ま え だ</div>
+
+    <script>
+        let triggered = false;
+
+        window.addEventListener('scroll', function() {
+            // 画面の一番下までスクロールしたか判定
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+                if (!triggered) {
+                    triggered = true;
+                    triggerJumpScare();
+                }
+            }
+        });
+
+        function triggerJumpScare() {
+            const overlay = document.getElementById('scare-overlay');
+            overlay.style.display = 'block';
+            overlay.classList.add('jumpscare-active');
+
+            // スマホのバイブ機能（Androidブラウザや一部の環境で動作）
+            if (navigator.vibrate) {
+                // 2秒間激しく震わせる
+                navigator.vibrate([400, 100, 400, 100, 400, 100, 400]);
+            }
+        }
+    </script>
+</body>
+</html>
