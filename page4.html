@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>縺ゅ縺励縺ｿ縺､縺代◆</title>
+    <link href="https://fonts.googleapis.com/css2?family=Potta+One&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            background-color: #000000;
+            color: #ff0000;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            height: 100%;
+        }
+
+        /* 最初の文字化け画面 */
+        .scroller {
+            height: 200vh; /* さらに長くして油断させる */
+            font-size: 18px;
+            letter-spacing: 5px;
+            word-break: break-all;
+            opacity: 0.5;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* 恐怖演出のコンテナ（初期状態は非表示） */
+        #horror-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        /* 自分の顔を映すビデオエレメント */
+        #camera-view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 画面いっぱいに表示 */
+            transform: scaleX(-1); /* 鏡のように反転 */
+            filter: sepia(1) hue-rotate(-50deg) saturate(5) contrast(1.5); /* 真っ赤で不気味なフィルター */
+            opacity: 0; /* 最初は透明 */
+        }
+
+        /* サブリミナルのお化けの影 */
+        #ghost-shadow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://i.imgur.com/8Q0bZ9A.png'); /* 不気味な顔の影画像（透過PNG） */
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            z-index: 10000;
+        }
+
+        /* 恐怖メッセージ */
+        #scare-message {
+            position: absolute;
+            width: 100%;
+            bottom: 10%;
+            text-align: center;
+            color: #fff;
+            font-family: 'Potta One', cursive; /* 狂気フォント */
+            font-size: 8vh;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+            z-index: 10001;
+            opacity: 0;
+        }
+
+        /* 激しい点滅アニメーション */
+        @keyframes extreme-flash {
+            0% { opacity: 0; }
+            5% { opacity: 1; background-color: #ff0000; } /* 一瞬真っ赤 */
+            10% { opacity: 0.8; background-color: transparent; }
+            15% { opacity: 1; background-color: #000; } /* 一瞬真っ黒 */
+            20% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        /* ビデオとメッセージを表示させるクラス */
+        .scare-active #camera-view,
+        .scare-active #scare-message {
+            opacity: 1;
+        }
+
+        /* サブリミナル点滅用のクラス */
+        .flash-active #ghost-shadow {
+            animation: extreme-flash 0.5s infinite;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="scroller">
+        <p>縺ゅ縺励縺ｿ縺､縺代◆縺</p>
+        <p>縺ｿ縺､縺代◆縺ｿ縺､縺代◆</p>
+        <p>縺繧医≧縺薙◎縺</p>
+        <p>縺 縺 縺 縺 縺 縺 縺 縺 縺 縺 縺 縺</p>
+        <br><br><br><br><br>
+        <p style="text-align: center; font-size: 14px; color: #333;">↓ 繧ｨ繝ｩ繝ｼ蜀�螳ｹ繧貞確認 ↓</p>
+        <br><br><br><br><br><br><br><br><br><br>
+        <p>縺励↓縺溘縺</p>
+    </div>
+
+    <div id="horror-container">
+        <video id="camera-view" autoplay playsinline muted></video>
+        <div id="ghost-shadow"></div>
+        <div id="scare-message">つぎは<br>おまえだ</div>
+    </div>
+
+    <script>
+        let triggered = false;
+        const horrorContainer = document.getElementById('horror-container');
+        const cameraView = document.getElementById('camera-view');
+
+        // スクロール検知
+        window.addEventListener('scroll', function() {
+            // 画面の一番下までスクロールしたか判定
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+                if (!triggered) {
+                    triggered = true;
+                    // まずカメラ入力を要求（これによりユーザーは「許可」を押す必要があり、緊張感が高まる。お化け屋敷では事前に許可をとる運用が望ましい）
+                    startCameraAndScare();
+                }
+            }
+        });
+
+        async function startCameraAndScare() {
+            try {
+                // インカメラ（User Camera）へのアクセスをリクエスト
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+                cameraView.srcObject = stream;
+                
+                // カメラ準備完了後に演出開始
+                cameraView.onloadedmetadata = () => {
+                    triggerVisualScare();
+                };
+            } catch (err) {
+                // カメラが許可されなかった場合のフォールバック（以前の点滅のみ）
+                console.error("Camera access denied: ", err);
+                triggerVisualScare(true); // fallback mode
+            }
+        }
+
+        function triggerVisualScare(isFallback = false) {
+            // コンテナを表示
+            horrorContainer.style.display = 'block';
+            
+            if (!isFallback) {
+                horrorContainer.classList.add('scare-active');
+            } else {
+                // カメラなしの場合は背景を真っ赤に
+                horrorContainer.style.backgroundColor = '#ff0000';
+                document.getElementById('scare-message').style.opacity = '1';
+            }
+
+            // サブリミナルフラッシュ開始
+            horrorContainer.classList.add('flash-active');
+
+            // 激しく、不規則なバイブレーション（Androidのみ）
+            if (navigator.vibrate) {
+                // ドクン…ドクン…心臓の鼓動のようなリズム
+                navigator.vibrate([100, 300, 100, 1000, 100, 300, 100, 1000, 100, 300, 100]);
+            }
+        }
+    </script>
+</body>
+</html>
