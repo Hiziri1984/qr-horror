@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>夢花クイズ</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            overflow: hidden; /* 画面外へのスクロールを防ぐ */
+        }
+
+        /* 診断コンテンツ全体のコンテナ */
+        .quiz-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px 20px;
+            background: #ffffff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        h2 {
+            color: #555;
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* 選択肢ボタンの基本スタイル */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            box-sizing: border-box;
+            transition: background 0.2s;
+        }
+        .btn:active {
+            background-color: #0056b3;
+        }
+
+        /* ーーー ここからバグ・ジャンプスケア用スタイル ーーー */
+        
+        /* 画面全体を覆う暗黒のオーバーレイ（カウントダウン・ジャンプスケア共通） */
+        #scare-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background-color: #000000;
+            z-index: 9999;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: contain;
+        }
+
+        /* 赤い特大カウントダウン・恐怖テキスト */
+        .scare-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 80px;
+            font-family: serif;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        /* バグ発生時の画面の激しい揺れ（アースクエイク効果） */
+        @keyframes glitch-shake {
+            0% { transform: translate(0, 0) skew(0deg); }
+            20% { transform: translate(-8px, 5px) skew(-5deg); }
+            40% { transform: translate(6px, -3px) skew(5deg); }
+            60% { transform: translate(-5px, -5px) skew(2deg); }
+            80% { transform: translate(4px, 4px) skew(-3deg); }
+            100% { transform: translate(0, 0) skew(0deg); }
+        }
+        .glitch-active {
+            animation: glitch-shake 0.15s infinite;
+        }
+
+        /* ジャンプスケア発動時の超高速点滅 */
+        @keyframes flash-red-white {
+            0% { background-color: #000000; }
+            50% { background-color: #ff0000; }
+            100% { background-color: #ffffff; }
+        }
+        .jumpscare-flash {
+            animation: flash-red-white 0.04s infinite !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quiz-box">
+        <h2 id="question-text">Q1. 夢花の誕生日は？</h2>
+        <div id="answers-box">
+            <button class="btn" onclick="nextQuestion()">2月23日</button>
+            <button class="btn" onclick="nextQuestion()">5月15日</button>
+            <button class="btn" onclick="nextQuestion()">1月14日</button>
+        </div>
+    </div>
+
+    <div id="scare-overlay">
+        <div class="scare-text" id="overlay-text">3</div>
+    </div>
+
+    <audio id="glitch-sound" src="error_noise.mp3" preload="auto"></audio>
+    <audio id="scream-sound" src="scream2.mp3" preload="auto"></audio>
+
+    <script>
+        let currentStep = 1;
+        const quizBox = document.getElementById('quiz-box');
+        const questionText = document.getElementById('question-text');
+        const answersBox = document.getElementById('answers-box');
+        const overlay = document.getElementById('scare-overlay');
+        const overlayText = document.getElementById('overlay-text');
+        
+        // 音声要素
+        const glitchSound = document.getElementById('glitch-sound');
+        const screamSound = document.getElementById('scream-sound');
+
+        function nextQuestion() {
+            currentStep++;
+
+            if (currentStep === 2) {
+                // 第2問：ちょっと不穏な質問にする
+                questionText.innerText = "Q2.元彼は何人？";
+                answersBox.innerHTML = `
+                    <button class="btn" onclick="nextQuestion()">1</button>
+                    <button class="btn" onclick="nextQuestion()">1</button>
+                    <button class="btn" onclick="nextQuestion()">1</button>
+                `;
+            } else if (currentStep === 3) {
+                // 第3問：文字化けが始まり、ボタンも1つだけに
+                document.body.style.backgroundColor = "#e0d0d0";
+                quizBox.style.borderColor = "#ff0000";
+                questionText.innerHTML = "Q3. 森沢栄音との関係は？";
+                answersBox.innerHTML = `
+                    <button class="btn" style="background-color: #cc0000;" onclick="startGlitchEvent()">結果を見る</button>
+                `;
+            }
+        }
+
+        // 最後のボタンを押した瞬間に始まる乗っ取り演出
+        function startGlitchEvent() {
+            // 1. 診断コンテンツの箱をバグらせてガタガタ揺らす
+            quizBox.classList.add('glitch-active');
+            document.body.style.backgroundColor = "#110000";
+            
+            // バグ音（ジジジッ、警告音など）を鳴らす
+            glitchSound.volume = 0.8;
+            glitchSound.play().catch(e => console.log("Audio play blocked"));
+
+            // 2. 1.5秒後に画面が突然真っ暗になり、カウントダウン開始
+            setTimeout(() => {
+                quizBox.style.display = 'none';
+                overlay.style.display = 'block';
+                
+                // カウントダウン処理 (3 -> 2 -> 1 -> ドン！)
+                let count = 3;
+                overlayText.innerText = count;
+
+                let interval = setInterval(() => {
+                    count--;
+                    if (count > 0) {
+                        overlayText.innerText = count;
+                        // カウントごとにスマホを短く振動させる
+                        if (navigator.vibrate) navigator.vibrate(200);
+                    } else {
+                        clearInterval(interval);
+                        triggerFinalScare();
+                    }
+                }, 1000);
+
+            }, 1500);
+        }
+
+        // 最終ジャンプスケア
+        function triggerFinalScare() {
+            // お化け画像を表示（用意してある場合）
+            overlay.style.backgroundImage = "url('obake2.png')";
+            
+            // テキスト特大化＆点滅開始
+            overlayText.innerText = "ブロッコリーのくせにピーマン好き嫌いするな";
+            overlayText.style.fontSize = "100px";
+            overlay.classList.add('jumpscare-flash');
+
+            // バグ音を止め、大音量の悲鳴を再生
+            glitchSound.pause();
+            screamSound.volume = 1.0;
+            screamSound.play().catch(e => console.log("Audio play blocked"));
+
+            // 激しいバイブレーション
+            if (navigator.vibrate) {
+                navigator.vibrate([400, 100, 400, 100, 400, 100, 1000]);
+            }
+        }
+    </script>
+</body>
+</html>
