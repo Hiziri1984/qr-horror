@@ -76,8 +76,8 @@
         }
 
         /*ジャンプスケア用*/
-        #jumpscare-screen {
-            display: none; 
+                #jumpscare-screen {
+            display: none; /* 初期は非表示 */
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
@@ -85,26 +85,24 @@
             background-color: #000;
         }
 
-        /* 画像 */
+        /* 画面いっぱいに広がる恐怖画像 */
         .scare-image {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* アップに */
+            object-fit: cover; /* 画面に画像を強制フィットさせてドアップに */
         }
 
-        /* アニメーション */
-        @keyframes curse-shake {
-            0%   { transform: translate(0, 0) scale(1.05); }
-            20%  { transform: translate(-4px, 5px) scale(1.05); filter: brightness(0.9); }
-            40%  { transform: translate(6px, -3px) scale(1.08); }
-            60%  { transform: translate(-5px, -5px) scale(1.05); filter: brightness(1.1); }
-            80%  { transform: translate(4px, 4px) scale(1.1); }
-            100% { transform: translate(0, 0) scale(1.05); }
+        /* 怨霊の拒絶反応を表現した画面の激しいブレ・明暗反転 */
+        @keyframes curse-glitch {
+            0% { transform: scale(1) translate(0, 0); filter: invert(0); }
+            20% { transform: scale(1.1) translate(-10px, 8px); filter: invert(0.8) sepia(1) hue-rotate(330deg); }
+            40% { transform: scale(1.05) translate(12px, -5px); filter: invert(0); }
+            60% { transform: scale(1.15) translate(-8px, -10px); filter: invert(0.8) contrast(2); }
+            80% { transform: scale(1) translate(5px, 5px); filter: invert(0); }
+            100% { transform: scale(1.2) translate(0, 0); filter: invert(1) brightness(0.5); }
         }
-        
         .curse-active {
-            /* 0.3秒周期揺れ */
-            animation: curse-shake 0.3s ease-in-out infinite;
+            animation: curse-glitch 0.04s infinite; /* 超高速で画面が歪み、色が反転し続ける */
         }
     </style>
 </head>
@@ -113,30 +111,34 @@
     <div class="container">
         <div class="us-header">
             <h1>CASE: 03 【  】</h1>
-            <div class="area-tag">USA / HORROR NO.3</div>
+            <div class="area-tag">Created: John Mathias / 1982: 遺品回収</div>
         </div>
 
-        <div class="work-box">
-            【 作品画像 】
-        </div>
+        <!-- <div class="work-box">
+            【 作品画像  】
+        </div> -->
 
         <div class="story-text">
             <p>澤本伊吹の遺作</p>
-            <p>1980年代、とある地方都市の廃墟で発見された未解決事件の遺品。このエリアの展示物は、すべて当時の凄惨な現場を再現して作られています。</p>
-            <p>凄まじい悪霊のエネルギーが未だに残っているため、体調に異変を感じた方は、すぐに目を逸らして出口へ向かってください。</p>
+            <p>伊吹が死の間際に描いたといわれる作品。享年21歳。<br>死の淵を見た伊吹は大きな雄たけびをあげ、自らの歯をすべてむしり取り貪り食ったという。</p>
+            <p>その姿を見たものは伊吹のあまりの滑稽さに笑いが止まらなかったという。</p>
         </div>
 
         <div class="scroll-trigger">
             ▼ MORE DETAILS (スクロールして詳細を展開)
         </div>
 
+        <!-- 罠：スクロールを引き延ばすための余白 -->
         <div style="height: 30vh;"></div>
     </div>
 
+    <!-- ジャンプスケア画面 -->
     <div id="jumpscare-screen">
+        <!-- ★ここにネットで見つけた和ホラー画像のURLをそのまま貼り付けてください！ -->
         <img class="scare-image" src="https://images.unsplash.com/photo-1509248961158-e54f6934749c?q=80&w=600" alt="CURSE">
     </div>
 
+    <!-- 音声：和風の大音量ホラー効果音（ふすまが壊れる音、女の悲鳴など） -->
     <audio id="curse-scream" src="jp_scream.mp3" preload="auto"></audio>
 
     <script>
@@ -148,8 +150,8 @@
             let maxScroll = document.body.offsetHeight - window.innerHeight;
             let currentScroll = window.scrollY;
 
-            // （全体の35%）
-            if (currentScroll > maxScroll * 0.35) {
+            // 作品紹介を読んで、少し下に進んだ瞬間（全体の35%）にノーモーションで暴発！
+            if (currentScroll > maxScroll * 0.50) {
                 if (!isScared) {
                     isScared = true;
                     executeJumpScare();
@@ -158,7 +160,7 @@
         });
 
         function executeJumpScare() {
-            // ジャンプスケア画面を表示し、エフェクト
+            // ジャンプスケア画面を表示し、ガタガタの画面呪いエフェクトをかける
             scareScreen.style.display = 'block';
             scareScreen.classList.add('curse-active');
 
@@ -166,7 +168,7 @@
             screamSound.volume = 1.0;
             screamSound.play().catch(e => console.log("Audio play blocked"));
 
-            // スマホのバイブレーション
+            // スマホのバイブレーション（心臓が激しく波打つような痙攣振動）
             if (navigator.vibrate) {
                 navigator.vibrate([100, 50, 100, 50, 500, 50, 500, 50, 1500]);
             }
