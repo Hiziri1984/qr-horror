@@ -73,8 +73,8 @@
 
         /* 中国語の羅列 */
         .glitch-zone {
-            margin-top: 200vh;
-            padding-bottom: 200vh;
+            margin-top: 150vh;
+            padding-bottom: 150vh;
         }
         .warning-text {
             font-size: 28px;
@@ -113,12 +113,12 @@
     <div class="container" id="main-content">
         <div class="chinese-header">
             <h1>展示作品 Ⅱ ：「  」</h1>
-            <div class="sub">制作者： / 制作年：</div>
+            <div class="sub">馮 覚（Fung Jue）/ 1978年（※長城周辺の未公開遺構にて発見）</div>
         </div>
 
-        <div class="work-photo-frame">
+        <!-- <div class="work-photo-frame">
             【 作品画像 】
-        </div>
+        </div> -->
 
         <div class="description">
             <p>この部屋に足を踏み入れた時から、あなたたちの背後には「澤本伊吹」が這い寄っている。</p>
@@ -160,10 +160,16 @@
             }
 
             // 強制スクロール
+            // 2. 指定位置を過ぎた瞬間に、強制高速スクロールを発動
             if (currentScroll > 250 && !isAutoScrolling && !isTriggered) {
-                isAutoScrolling = true;
-                startForcedScroll(maxScroll);
+                isAutoScrolling = true; // 連打防止のためにフラグはすぐ立てる
+
+                // ★ここにタイマーを挟んで、開始を1秒（1000ミリ秒）遅らせる
+                setTimeout(() => {
+                    startForcedScroll(maxScroll);
+                }, 2000); 
             }
+            
         });
 
         // 強制スクロールの処理
