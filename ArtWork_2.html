@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品 Ⅱ - </title>
+    <style>
+        /* ーーー 中華風デザイン ーーー */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0d0606; /* 黒赤 */
+            color: #ccb091; /* 金の文字 */
+            /* 明朝体・セリフ体を指定 */
+            font-family: 'Noto Serif JP', 'SimSun', 'ヒラギノ明朝 ProN', serif;
+            overflow-x: hidden;
+        }
+
+        /* コンテナ */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        /* 中華風ヘッダ */
+        .chinese-header {
+            text-align: center;
+            border: 3px double #8a1f1f; /* 赤枠 */
+            padding: 20px;
+            margin-bottom: 60px;
+            background-color: #140b0b;
+        }
+        .chinese-header h1 {
+            color: #bd1313; /* 血の赤 */
+            font-size: 26px;
+            letter-spacing: 6px;
+            margin: 0 0 10px 0;
+        }
+        .chinese-header .sub {
+            font-size: 13px;
+            color: #7a6b5c;
+            letter-spacing: 2px;
+        }
+
+        /* 作品写真が入る枠（後で入れます） */
+        .work-photo-frame {
+            width: 100%;
+            height: 250px;
+            border: 1px solid #4a2323;
+            background-color: #1a1010;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #543d3d;
+            margin-bottom: 40px;
+        }
+        .work-photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 解説文章 */
+        .description {
+            font-size: 16px;
+            line-height: 2.2;
+            letter-spacing: 2px;
+            text-align: justify;
+            margin-bottom: 100px;
+        }
+
+        /* 中国語の羅列 */
+        .glitch-zone {
+            margin-top: 200vh;
+            padding-bottom: 200vh;
+        }
+        .warning-text {
+            font-size: 28px;
+            color: #3b0a0a; /* 赤黒い文字 */
+            text-align: center;
+            margin: 180px 0;
+            font-weight: bold;
+            letter-spacing: 8px;
+            transition: color 0.5s, transform 0.1s;
+        }
+
+        #final-stop-zone {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        /* 不気味なテキスト */
+        .talisman-text {
+            display: none; /* 最初は非表示 */
+            color: #d91414;
+            font-size: 45px;
+            font-weight: bold;
+            letter-spacing: 10px;
+            line-height: 1.5;
+            writing-mode: vertical-rl; /* 縦書き */
+            font-family: 'SimSun', serif;
+            text-shadow: 0 0 10px rgba(217, 20, 20, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="main-content">
+        <div class="chinese-header">
+            <h1>展示作品 Ⅱ ：「  」</h1>
+            <div class="sub">制作者： / 制作年：</div>
+        </div>
+
+        <div class="work-photo-frame">
+            【 作品画像 】
+        </div>
+
+        <div class="description">
+            <p>この部屋に足を踏み入れた時から、あなたたちの背後には「澤本伊吹」が這い寄っている。</p>
+            <p>古来より中国に伝わる道術において、死者の魂を呼び戻す儀式は固く禁じられてきた。なぜなら、戻ってくるものは決して元の人間ではないからだ。</p>
+            <p>壁に貼られた無数の赤紙。その文字は決して読んではいけない。</p>
+            <p style="text-align: center; color: #8a1f1f; margin-top: 60px;">▼ 下へスクロールして詳細を確認 ▼</p>
+        </div>
+
+        <div class="glitch-zone">
+            <p class="warning-text">快 離 開</p> <p class="warning-text" style="font-size: 36px;">急 急 如 律 令</p> <p class="warning-text">誰 在 後 面</p> <p class="warning-text" style="font-size: 40px; color: #6e0c0c;">死 期 已 至</p><p class="warning-text">不要看</p> <p class="warning-text" style="font-size: 34px;">有鬼</p> <p class="warning-text">你在看什麼？</p> <p class="warning-text">回頭</p> <p class="warning-text" style="font-size: 42px;">留下來</p> <p class="warning-text">怨気撞天</p> <p class="warning-text">不能逃</p> <p class="warning-text" style="font-size: 30px;">活人禁地</p> <p class="warning-text">救 命 啊</p>   <p class="warning-text">快 離 開</p> <p class="warning-text" style="font-size: 36px;">急 急 如 律 令</p> <p class="warning-text">誰 在 後 面</p> <p class="warning-text" style="font-size: 40px; color: #6e0c0c;">死 期 已 至</p><p class="warning-text">不要看</p> <p class="warning-text" style="font-size: 34px;">有鬼</p> <p class="warning-text">你在看什麼？</p> <p class="warning-text">回頭</p> <p class="warning-text" style="font-size: 42px;">留下來</p> <p class="warning-text">怨気撞天</p> <p class="warning-text">不能逃</p> <p class="warning-text" style="font-size: 30px;">活人禁地</p> <p class="warning-text">救 命 啊</p> <p class="warning-text">快 離 開</p> <p class="warning-text" style="font-size: 36px;">急 急 如 律 令</p> <p class="warning-text">誰 在 後 面</p> <p class="warning-text" style="font-size: 40px; color: #6e0c0c;">死 期 已 至</p><p class="warning-text">不要看</p> <p class="warning-text" style="font-size: 34px;">有鬼</p> <p class="warning-text">你在看什麼？</p> <p class="warning-text">回頭</p> <p class="warning-text" style="font-size: 42px;">留下來</p> <p class="warning-text">怨気撞天</p> <p class="warning-text">不能逃</p></div>
+
+        <div id="final-stop-zone">
+            <div class="talisman-text" id="talisman">
+                最近伊吹<br>
+                之肌荒酷
+            </div>
+        </div>
+    </div>
+
+    <audio id="bg-loop" src="china_ambient.mp3" loop preload="auto"></audio>
+    <audio id="scare-hit" src="china_scare.mp3" preload="auto"></audio>
+
+    <script>
+        let isAutoScrolling = false;
+        let isTriggered = false;
+        
+        const bgSound = document.getElementById('bg-loop');
+        const scareSound = document.getElementById('scare-hit');
+        const talisman = document.getElementById('talisman');
+        const warningTexts = document.querySelectorAll('.warning-text');
+
+        window.addEventListener('scroll', function() {
+            let maxScroll = document.body.offsetHeight - window.innerHeight;
+            let currentScroll = window.scrollY;
+
+            if (currentScroll > 50) {
+                bgSound.volume = 0.4;
+                bgSound.play().catch(e => {});
+            }
+
+            // 強制スクロール
+            if (currentScroll > 250 && !isAutoScrolling && !isTriggered) {
+                isAutoScrolling = true;
+                startForcedScroll(maxScroll);
+            }
+        });
+
+        // 強制スクロールの処理
+        
+        function startForcedScroll(targetScroll) {
+            // BGMのテンポ
+            bgSound.volume = 0.8;
+
+            // 文字の色を赤くして揺らす
+            warningTexts.forEach(text => {
+                text.style.color = '#ff0000';
+                text.style.transform = `scale(1.2) translateX(${(Math.random() - 0.5) * 20}px)`;
+            });
+
+            // スクロールのアニメーション関数
+            function scrollStep() {
+                let current = window.scrollY;
+                // 現在地から降ろす毎フレーム+35px
+                if (current < targetScroll - 10) {
+                    window.scrollTo(0, current + 80);
+                    requestAnimationFrame(scrollStep);
+                } else {
+                    // 最下部に到達したら止まる
+                    window.scrollTo(0, targetScroll);
+                    isAutoScrolling = false;
+                    isTriggered = true;
+                    triggerChinaScare();
+                }
+            }
+            requestAnimationFrame(scrollStep);
+        }
+
+        // ブレーキ後の演出
+        function triggerChinaScare() {
+            // BGMを止める
+            bgSound.pause();
+
+            // 一瞬だけバイブ
+            if (navigator.vibrate) navigator.vibrate(300);
+
+            // 0.8秒の無音
+            setTimeout(() => {
+                talisman.style.display = 'block';
+                
+                // ドラの音、笑い声
+                scareSound.volume = 1.0;
+                scareSound.play().catch(e => {});
+
+                // スマホを細かく振動
+                if (navigator.vibrate) navigator.vibrate([100, 100, 100, 100, 100, 100, 500]);
+            }, 800);
+        }
+    </script>
+</body>
+</html>
