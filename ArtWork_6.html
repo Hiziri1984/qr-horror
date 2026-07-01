@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>収蔵番号：03 - 髪伸びの人形</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+            color: #cccccc;
+            /* 雰囲気のある和風明朝体 */
+            font-family: 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        /* ヘッダー：和風のシンプルな枠線 */
+        .jp-header {
+            text-align: center;
+            border-top: 2px solid #800000;
+            border-bottom: 2px solid #800000;
+            padding: 15px 0;
+            margin-bottom: 40px;
+        }
+        .jp-header h1 {
+            color: #a00000;
+            font-size: 22px;
+            letter-spacing: 4px;
+            margin: 0;
+        }
+        .jp-header .area-tag {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* 人形画像置き場：縦長のデザイン */
+        .work-image-container {
+            width: 100%;
+            height: 420px;
+            background-color: #000;
+            border: 1px solid #222;
+            margin-bottom: 40px;
+            overflow: hidden;
+            position: relative;
+        }
+        .work-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: brightness(0.75);
+        }
+
+        /* 解説文章 */
+        .story-text {
+            font-size: 15px;
+            line-height: 2.1;
+            color: #b3b3b3;
+            margin-bottom: 60px;
+        }
+        .story-text p {
+            margin-bottom: 1.5em;
+        }
+
+        /* スクロールで出現するテキスト */
+        #ghost-words {
+            display: none;
+            color: #c00000;
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: 12px;
+            margin: 40px 0;
+        }
+
+        .scroll-trigger {
+            text-align: center;
+            color: #444;
+            font-size: 12px;
+            letter-spacing: 2px;
+            margin: 60px 0;
+        }
+
+        /* 画面全体が衝撃でブレるバグエフェクト */
+        @keyframes screen-shake {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(-6px, 4px); }
+            40% { transform: translate(6px, -4px); }
+            60% { transform: translate(-4px, -2px); }
+            80% { transform: translate(4px, 4px); }
+            100% { transform: translate(0, 0); }
+        }
+        .curse-active {
+            animation: screen-shake 0.05s infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="main-container">
+        <div class="jp-header">
+            <h1>収蔵番号：03 【 雛（ひいな） 】</h1>
+            <div class="area-tag">作者不詳 / 大正十四年 旧家解体時に回収</div>
+        </div>
+
+        <div class="work-image-container">
+            <img class="work-image" id="target-image" src="JP_doll.jpg" alt="日本人形">
+        </div>
+
+        <div class="story-text">
+            <p>古びた桐箱に収められていた、一体の美しい日本人形。</p>
+            <p>この人形が置かれた部屋では、夜な夜な「トントン」と、障子や壁を優しく叩くような音が聞こえるという奇妙な伝承がある。</p>
+            <p>最初は小さな音だが、人形に意識を向ければ向けるほど、その音は徐々に大きく、そして激しく変化していくと言われているが……。</p>
+        </div>
+
+        <div id="ghost-words">だ し て</div>
+
+        <div class="scroll-trigger">
+            ▼ スクロールして詳細を確認
+        </div>
+
+        <div style="height: 40vh;"></div>
+    </div>
+
+    <script>
+        let step2 = false;
+        let audioReady = false; 
+        let animationInterval = null;
+        
+        // 用意した素材ファイル名に書き換えてください
+        const imgNormal = 'JP_doll.jpg'; // 通常
+        const imgStrike1 = 'face.jpg';     // 振りかぶる
+        const imgStrike2 = 'JP_doll.jpg';     // 叩く
+        const curseSound = new Audio('ドア・ドンドン叩く02.mp3'); // 効果音
+
+        const targetImage = document.getElementById('target-image');
+        const mainContainer = document.getElementById('main-container');
+        const ghostWords = document.getElementById('ghost-words');
+
+        // スマホ対策：1回タップで音声再生の権限を取得
+        window.addEventListener('click', function() {
+            if (!audioReady) {
+                curseSound.play().then(() => {
+                    curseSound.pause();
+                    curseSound.currentTime = 0;
+                    audioReady = true;
+                }).catch(e => console.log("初期タップブロック:", e));
+            }
+        }, { once: true });
+
+        // スクロール監視
+        window.addEventListener('scroll', function() {
+            let maxScroll = document.body.offsetHeight - window.innerHeight;
+            let currentScroll = window.scrollY;
+
+            // スクロールが55%を超えたら、中から叩きつける演出を発動
+            if (currentScroll > maxScroll * 0.38 && !step2) {
+                step2 = true;
+                executeDollCurse();
+            }
+        });
+
+        function executeDollCurse() {
+            // 1. 画面全体をガガガッと激しく揺らす
+            mainContainer.classList.add('curse-active');
+            ghostWords.style.display = 'block';
+
+            // 2. 用意した最高の効果音を再生
+            curseSound.volume = 1.0;
+            curseSound.play().catch(e => console.log("再生ブロック:", e));
+
+            // 3. 2枚の画像を高速（0.08秒おき）で交互に切り替えて連打を表現
+            let toggle = true;
+            animationInterval = setInterval(function() {
+                if (toggle) {
+                    targetImage.src = imgStrike1; // 振りかぶる
+                } else {
+                    targetImage.src = imgStrike2; // 叩く
+                }
+                toggle = !toggle;
+
+                // 叩く画像切り替えと同時にスマホを細かくバイブ
+                if (navigator.vibrate) {
+                    navigator.vibrate(30);
+                }
+            }, 60); // ここで叩く往復の速さを調整できます
+
+            // 4. 1.8秒後にピタッと静寂に戻す（メリハリ）
+            setTimeout(function() {
+                clearInterval(animationInterval);
+                mainContainer.classList.remove('curse-active');
+                
+                curseSound.pause();
+                curseSound.currentTime = 0;
+
+                // 画像を元の通常人形に戻す（誰もいない静けさの演出）
+                targetImage.src = imgNormal;
+
+                if (navigator.vibrate) {
+                    navigator.vibrate(0);
+                }
+            }, 1200);
+        }
+    </script>
+</body>
+</html>
