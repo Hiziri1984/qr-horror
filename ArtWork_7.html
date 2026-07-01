@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXHIBITION ARCHIVE // SUBJECT: TAKEHANA</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #050505;
+            color: #b3d9ff;
+            font-family: 'Courier Prime', monospace;
+            overflow-x: hidden;
+            min-height: 160vh;
+            position: relative;
+        }
+
+        /* 左右の背景用彫刻（モノクロで視認性を確保） */
+        .side-sculpture {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 22vw;
+            max-width: 190px;
+            height: 70vh;
+            background-image: url('takehana.png');
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #1a2936;
+            z-index: 1;
+            filter: grayscale(1) contrast(1.4) brightness(0.5); 
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .left-side { left: 2vw; }
+        .right-side { right: 2vw; }
+
+        /* 中央の解説エリア */
+        .main-content {
+            max-width: 46vw;
+            margin: 0 auto;
+            padding: 60px 0 100px 0;
+            text-align: justify;
+            position: relative;
+            z-index: 5;
+        }
+
+        .document-header {
+            text-align: center;
+            border-bottom: 1px solid #1f3347;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+
+        .main-title {
+            font-size: 18pt;
+            letter-spacing: 2px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .document-meta {
+            font-size: 9.5pt;
+            color: #5c85ad;
+        }
+
+        /* 中央のメイン展示画像（カラー） */
+        .work-photo-frame {
+            width: 100%;
+            max-width: 380px;
+            margin: 0 auto 40px auto;
+            border: 1px solid #1f3347;
+            background-color: #0b1116;
+            padding: 8px;
+        }
+        .work-photo-frame img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .description-paragraph {
+            font-size: 11pt;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            color: #cbdbe6;
+        }
+
+        /* -------------------------------------------
+           ★ 改善：オーバーレイ全体のズレをJSで補正するためのベース設定
+        ------------------------------------------- */
+        .jumpscare-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 100000;
+            display: none;
+            overflow: hidden;
+        }
+        
+        .jumpscare-overlay img {
+            position: absolute;
+            /* JSから直接中心座標(px)を指定するため、CSS側は初期化 */
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* 物理的ブレ（インラインで付与される中心点に対してアニメーションを適用） */
+        .shock-shake-active .jumpscare-overlay img {
+            animation: violent-shake 0.04s infinite alternate;
+        }
+        @keyframes violent-shake {
+            0% { margin-top: -8px; margin-left: 8px; transform: translate(-50%, -50%) scale(1.03); }
+            50% { margin-top: 6px; margin-left: -7px; transform: translate(-50%, -50%) scale(0.97); }
+            100% { margin-top: -4px; margin-left: -4px; transform: translate(-50%, -50%) scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="jumpscare-overlay" id="jumpscareBox">
+        <img src="wom.webp" alt="🚨" id="scareImg">
+    </div>
+
+    <div class="side-sculpture left-side"></div>
+    <div class="side-sculpture right-side"></div>
+
+    <div class="main-content">
+        <div class="document-header">
+            <div class="main-title">Sculpture II: "TAKEHANA"</div>
+            <div class="document-meta">Artist: Unknown / Found in New England, 1994 / Catalog #Alpha-09</div>
+        </div>
+        
+        <div class="work-photo-frame">
+            <img src="takehana.png" alt="Sculpture TAKEHANA">
+        </div>
+
+        <div class="description-paragraph">
+            This sculpture, discovered in an abandoned industrial facility in 1994, presents a chilling intersection of organic mimicry and violent structural damage. The head is coated in a weathered, golden-metallic veneer, deeply fractured as if subjected to intense pressure.
+        </div>
+
+        <div class="description-paragraph">
+            The most striking feature is the heavy, rusted iron blade embedded directly into the cranial sector. The positioning suggests a deliberate, ritualistic act or a symbolic representation of trauma. Witnesses reported hearing localized auditory anomalies when standing within close proximity to the object.
+        </div>
+
+        <div class="description-paragraph" style="color: #5c85ad; text-align: center; margin-top: 50px;">
+            [ Scroll down for continuous analysis reports ]
+        </div>
+    </div>
+
+    <audio id="scareAudio" src="china_scare.mp3" loop preload="auto"></audio>
+
+    <script>
+        let triggered = false;
+        const jumpscareBox = document.getElementById('jumpscareBox');
+        const scareImg = document.getElementById('scareImg');
+        const scareAudio = document.getElementById('scareAudio');
+
+        window.addEventListener('scroll', () => {
+            if (triggered) return;
+
+            if (window.scrollY > 150) {
+                triggered = true;
+                executeSuddenScare();
+            }
+        });
+
+        function executeSuddenScare() {
+            // ★【最重要】ブラウザの「今現在のリアルな表示エリアの縦横ピクセル数」を正確に取得
+            const viewWidth = window.innerWidth;
+            const viewHeight = window.innerHeight;
+
+            // 画像の位置を、CSSの％ではなく「物理的な中心ピクセル」へ強制的に貼り付ける
+            scareImg.style.top = (viewHeight / 2) + 'px';
+            scareImg.style.left = (viewWidth / 2) + 'px';
+            scareImg.style.transform = 'translate(-50%, -50%)'; // 中心点を基準にする
+
+            jumpscareBox.style.display = 'block';
+            document.body.classList.add('shock-shake-active');
+
+            try {
+                scareAudio.volume = 1.0;
+                scareAudio.play();
+            } catch(e) {}
+            
+            document.title = "FATAL ERROR";
+
+            // 1.5秒後に自動で元の静寂に戻す
+            setTimeout(() => {
+                jumpscareBox.style.display = 'none';
+                document.body.classList.remove('shock-shake-active');
+                
+                scareAudio.pause();
+                scareAudio.currentTime = 0;
+                
+                document.title = "EXHIBITION ARCHIVE // SUBJECT: TAKEHANA";
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
