@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -180,6 +180,192 @@
                     navigator.vibrate(0);
                 }
             }, 400); // ←ここの数値を小さくすると、さらに表示時間が短くなります（例: 800 で0.8秒）
+        }
+    </script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CASE FILE: 03 - THE EVIL</title>
+    <style>
+        /* アメリカ風 */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #050505;
+            color: #eeeeee;
+            /* ゴシック体 */
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            box-sizing: border-box;
+        }
+
+        /* ヘッダー */
+        .us-header {
+            text-align: center;
+            border-top: 4px solid #990000;
+            border-bottom: 4px solid #990000;
+            padding: 15px 0;
+            margin-bottom: 50px;
+        }
+        .us-header h1 {
+            color: #e60000;
+            font-size: 32px;
+            letter-spacing: 2px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+        .us-header .area-tag {
+            font-size: 14px;
+            color: #666;
+            letter-spacing: 4px;
+            margin-top: 5px;
+        }
+
+        /* 修正：作品画像置き場（コンテナからはみ出さないよう調整） */
+        .work-image-container {
+            width: 100%;
+            height: 280px; /* 元の .work-box と同じ高さに固定 */
+            background-color: #111;
+            border: 2px dashed #333;
+            margin-bottom: 40px;
+            overflow: hidden; /* 万が一画像が大きくてもはみ出しをカット */
+            box-sizing: border-box;
+        }
+        .work-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 画像の全体が枠内にきれいに収まるように配置 */
+            filter: grayscale(20%) contrast(110%);
+        }
+
+        /* 解説文章 */
+        .story-text {
+            font-family: sans-serif;
+            font-size: 16px;
+            line-height: 2;
+            color: #bbb;
+            margin-bottom: 150px;
+        }
+
+        .scroll-trigger {
+            text-align: center;
+            color: #444;
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin: 100px 0;
+        }
+
+        /*ジャンプスケア用*/
+        #jumpscare-screen {
+            display: none; /* 初期は非表示 */
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 9999;
+            background-color: #000;
+        }
+
+        /* 画面いっぱいに広がる恐怖画像 */
+        .scare-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 画面に画像を強制フィットさせてドアップに */
+        }
+
+        /* 怨霊の拒絶反応を表現した画面の激しいブレ・明暗反転 */
+        @keyframes curse-glitch {
+            0% { transform: scale(1) translate(0, 0); filter: invert(0); }
+            20% { transform: scale(1.1) translate(-10px, 8px); filter: invert(0.8) sepia(1) hue-rotate(330deg); }
+            40% { transform: scale(1.05) translate(12px, -5px); filter: invert(0); }
+            60% { transform: scale(1.15) translate(-8px, -10px); filter: invert(0.8) contrast(2); }
+            80% { transform: scale(1) translate(5px, 5px); filter: invert(0); }
+            100% { transform: scale(1.2) translate(0, 0); filter: invert(1) brightness(0.5); }
+        }
+        .curse-active {
+            animation: curse-glitch 0.04s infinite; /* 超高速で画面が歪み、色が反転し続ける */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="us-header">
+            <h1>CASE: 03 【 THE EVIL 】</h1>
+            <div class="area-tag">Created: John Mathias / 1982: 遺品回収</div>
+        </div>
+
+        <div class="work-image-container">
+            <img class="work-image" src="clown.png" alt="澤本伊吹の遺作 - 1982年回収">
+        </div>
+
+        <div class="story-text">
+            <p>澤本伊吹の遺作</p>
+            <p>伊吹が死の間際に描いたといわれる作品。享年21歳。<br>死の淵を見た伊吹は大きな雄たけびをあげ、自らの歯をすべてむしり取り貪り食ったという。</p>
+            <p>その姿を見たものは伊吹のあまりの滑稽さに笑いが止まらなかったという。</p>
+        </div>
+
+        <div class="scroll-trigger">
+            ▼ MORE DETAILS (スクロールして詳細を展開)
+        </div>
+
+        <div style="height: 30vh;"></div>
+    </div>
+
+    <div id="jumpscare-screen">
+        <img class="scare-image" src="https://images.unsplash.com/photo-1509248961158-e54f6934749c?q=80&w=600" alt="CURSE">
+    </div>
+
+    <audio id="curse-scream" src="jp_scream.mp3" preload="auto"></audio>
+
+    <script>
+        let isScared = false;
+        const scareScreen = document.getElementById('jumpscare-screen');
+        const screamSound = document.getElementById('curse-scream');
+
+        window.addEventListener('scroll', function() {
+            let maxScroll = document.body.offsetHeight - window.innerHeight;
+            let currentScroll = window.scrollY;
+
+            if (currentScroll > maxScroll * 0.35) {
+                if (!isScared) {
+                    isScared = true;
+                    executeJumpScare();
+                }
+            }
+        });
+
+        function executeJumpScare() {
+            scareScreen.style.display = 'block';
+            scareScreen.classList.add('curse-active');
+
+            screamSound.volume = 1.0;
+            screamSound.play().catch(e => console.log("Audio play blocked"));
+
+            if (navigator.vibrate) {
+                navigator.vibrate([100, 50, 100, 50, 500, 50, 500, 50, 1500]);
+            }
+
+            setTimeout(function() {
+                scareScreen.style.display = 'none';
+                scareScreen.classList.remove('curse-active');
+                
+                screamSound.pause();
+                screamSound.currentTime = 0;
+
+                if (navigator.vibrate) {
+                    navigator.vibrate(0);
+                }
+            }, 400);
         }
     </script>
 </body>
