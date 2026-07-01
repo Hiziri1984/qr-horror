@@ -11,7 +11,6 @@
             padding: 0;
             background-color: #0d0606; /* 黒赤 */
             color: #ccb091; /* 金の文字 */
-            /* 明朝体・セリフ体を指定 */
             font-family: 'Noto Serif JP', 'SimSun', 'ヒラギノ明朝 ProN', serif;
             overflow-x: hidden;
         }
@@ -44,22 +43,36 @@
             letter-spacing: 2px;
         }
 
-        /* 作品写真が入る枠（後で入れます） */
+        /* 作品写真が入る枠 */
         .work-photo-frame {
             width: 100%;
-            height: 250px;
-            border: 1px solid #4a2323;
+            max-width: 500px;
+            margin: 0 auto 40px auto;
+            border: 2px solid #5a1212;
             background-color: #1a1010;
+            box-shadow: 0 0 15px rgba(138, 31, 31, 0.4);
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #543d3d;
-            margin-bottom: 40px;
+            transition: filter 0.5s ease;
         }
         .work-photo-frame img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        /* バグ開始時に画像が呪われる演出 */
+        .cursed-image {
+            animation: img-shake 0.1s infinite;
+            filter: contrast(2) saturate(2) hue-rotate(300deg) !important;
+        }
+        @keyframes img-shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            50% { transform: translate(-1px, -1px) rotate(-0.5deg); }
+            100% { transform: translate(1px, -1px) rotate(0.5deg); }
         }
 
         /* 解説文章 */
@@ -71,19 +84,48 @@
             margin-bottom: 100px;
         }
 
-        /* 中国語の羅列 */
+        /* ーーー ★大幅強化：狂気の中国語ゾーン ーーー */
         .glitch-zone {
-            margin-top: 90vh;
-            padding-bottom: 150vh;
+            margin-top: 50vh;
+            padding-bottom: 120vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+        
+        /* 初期状態：暗く沈んだ赤黒い文字 */
         .warning-text {
-            font-size: 28px;
-            color: #3b0a0a; /* 赤黒い文字 */
+            color: #3b0a0a; 
             text-align: center;
-            margin: 180px 0;
+            margin: 100px 0; /* 間隔を少し詰めて密度をアップ */
             font-weight: bold;
-            letter-spacing: 8px;
-            transition: color 0.5s, transform 0.1s;
+            transition: color 0.3s, transform 0.1s, filter 0.3s;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+            width: 100%;
+            word-break: break-all;
+        }
+
+        /* ★追加：強制スクロール突入時に付与される発狂アニメーション */
+        .madness-blink {
+            animation: text-madness 0.08s infinite alternate !important;
+        }
+
+        @keyframes text-madness {
+            0% { 
+                color: #ff0000; 
+                filter: blur(0px) contrast(2);
+                text-shadow: 0 0 10px #ff0000, 2px 2px 0 #000;
+            }
+            50% {
+                color: #8b0000;
+                filter: blur(1px);
+                text-shadow: 0 0 20px #8b0000, -2px -2px 0 #000;
+            }
+            100% { 
+                color: #ffffff; /* 時折混ざる白のフラッシュでバグ感を演出 */
+                filter: blur(0px) invert(0.2);
+                text-shadow: 0 0 15px #ff0000;
+            }
         }
 
         #final-stop-zone {
@@ -96,13 +138,13 @@
         }
         /* 不気味なテキスト */
         .talisman-text {
-            display: none; /* 最初は非表示 */
+            display: none;
             color: #d91414;
             font-size: 45px;
             font-weight: bold;
             letter-spacing: 10px;
             line-height: 1.5;
-            writing-mode: vertical-rl; /* 縦書き */
+            writing-mode: vertical-rl;
             font-family: 'SimSun', serif;
             text-shadow: 0 0 10px rgba(217, 20, 20, 0.5);
         }
@@ -116,19 +158,37 @@
             <div class="sub">馮 覚（Fung Jue）/ 1978年（※長城周辺の未公開遺構にて発見）</div>
         </div>
 
-        <!-- <div class="work-photo-frame">
-            【 作品画像 】
-        </div> -->
+        <div class="work-photo-frame" id="photoFrame">
+            <img src="china.png" alt="展示作品 Ⅱ" id="targetImg">
+        </div>
 
         <div class="description">
-            <p>この部屋に足を踏み入れた時から、あなたたちの背後には「澤本伊吹」が這い寄っている。</p>
-            <p>古来より中国に伝わる道術において、死者の魂を呼び戻す儀式は固く禁じられてきた。なぜなら、戻ってくるものは決して元の人間ではないからだ。</p>
-            <p>壁に貼られた無数の赤紙。その文字は決して読んではいけない。</p>
+            <p>書くことない</p>
             <p style="text-align: center; color: #8a1f1f; margin-top: 60px;">▼ 下へスクロールして詳細を確認 ▼</p>
         </div>
 
+        <!-- ーーー ★テキストの文言とバリエーションをよりおぞましく強化 ーーー -->
         <div class="glitch-zone">
-            <p class="warning-text">快 離 開</p> <p class="warning-text" style="font-size: 36px;">急 急 如 律 令</p> <p class="warning-text">快 離 開</p> <p class="warning-text" style="font-size: 36px;">急 急 如 律 令</p> <p class="warning-text">誰 在 後 面</p> <p class="warning-text" style="font-size: 40px; color: #6e0c0c;">死 期 已 至</p><p class="warning-text">不要看</p> <p class="warning-text" style="font-size: 34px;">有鬼</p> <p class="warning-text">你在看什麼？</p> <p class="warning-text">回頭</p> <p class="warning-text" style="font-size: 42px;">留下來</p> <p class="warning-text">怨気撞天</p> <p class="warning-text">不能逃</p> <p class="warning-text" style="font-size: 30px;">活人禁地</p> <p class="warning-text">救 命 啊</p>   <p class="warning-text">快 離 開</p> <p class="warning-text" style="font-size: 36px;">急 急 如 律 令</p> <p class="warning-text">誰 在 後 面</p> <p class="warning-text" style="font-size: 40px; color: #6e0c0c;">死 期 已 至</p><p class="warning-text">不要看</p> <p class="warning-text">快 離 開</p> <p class="warning-text" style="font-size: 36px;">急 急 如 律 令</p> <p class="warning-text" style="font-size: 34px;">有鬼</p> <p class="warning-text">快 離 開</p> <p class="warning-text" style="font-size: 36px;">急 急 如 律 令</p>  </div>
+            <p class="warning-text" style="font-size: 28px; letter-spacing: 6px;">呪 殺</p>
+            <p class="warning-text" style="font-size: 36px; letter-spacing: 8px;">怨 念</p>
+            <p class="warning-text" style="font-size: 32px;">呪 殺</p>
+            <p class="warning-text" style="font-size: 45px; letter-spacing: 12px;">死 期 </p>
+            <p class="warning-text" style="font-size: 26px;">死 死 死</p>
+            <p class="warning-text" style="font-size: 50px;">鬼 鬼</p>
+            <p class="warning-text" style="font-size: 30px;">你 在 看 什 麼 ？</p>
+            <p class="warning-text" style="font-size: 55px; letter-spacing: 20px;">殺</p>
+            <p class="warning-text" style="font-size: 60px;">禁 禁</p>
+            <p class="warning-text" style="font-size: 34px;">視 札</p>
+            <p class="warning-text" style="font-size: 40px;">不 能 逃</p>
+            <p class="warning-text" style="font-size: 42px;">活 人 禁 地</p>
+            <p class="warning-text" style="font-size: 65px; font-family: 'MS Mincho', serif;"> 命 啊 命 啊 命 </p>
+            <p class="warning-text" style="font-size: 38px;">魂 飛 魄 散</p>
+            <p class="warning-text" style="font-size: 48px;">呪殺呪殺呪殺呪殺呪殺</p>
+            <p class="warning-text" style="font-size: 70px; letter-spacing: -5px;">死死死死死死死死死死</p>
+            <p class="warning-text" style="font-size: 32px;">禍 禍 禍 禍 禍 禍 禍 禍 禍 禍</p>
+            <p class="warning-text" style="font-size: 50px;">後悔後悔後悔後悔後悔</p>
+            <p class="warning-text" style="font-size: 80px; color: #5a0000;">禍</p>
+        </div>
 
         <div id="final-stop-zone">
             <div class="talisman-text" id="talisman">
@@ -149,6 +209,7 @@
         const scareSound = document.getElementById('scare-hit');
         const talisman = document.getElementById('talisman');
         const warningTexts = document.querySelectorAll('.warning-text');
+        const targetImg = document.getElementById('targetImg');
 
         window.addEventListener('scroll', function() {
             let maxScroll = document.body.offsetHeight - window.innerHeight;
@@ -159,40 +220,55 @@
                 bgSound.play().catch(e => {});
             }
 
-            // 強制スクロール
-            // 2. 指定位置を過ぎた瞬間に、強制高速スクロールを発動
+            // 強制スクロール発動位置
             if (currentScroll > 250 && !isAutoScrolling && !isTriggered) {
-                isAutoScrolling = true; // 連打防止のためにフラグはすぐ立てる
+                isAutoScrolling = true;
 
-                // ★ここにタイマーを挟んで、開始を1秒（1000ミリ秒）遅らせる
+                if(targetImg) {
+                    targetImg.classList.add('cursed-image');
+                }
+
+                // 2秒間の「タメ」の間に、徐々に文字の不穏な兆候を出す
+                warningTexts.forEach((text, index) => {
+                    setTimeout(() => {
+                        text.style.color = '#8b0000';
+                        text.style.transform = `scale(1.05) translateX(${(Math.random() - 0.5) * 10}px)`;
+                    }, index * 50); // 上から順にじんわりと変化
+                });
+
+                // 2秒後に強制スクロール開始
                 setTimeout(() => {
                     startForcedScroll(maxScroll);
-                }, 2000); 
+                }, 900); 
             }
-            
         });
 
         // 強制スクロールの処理
-        
         function startForcedScroll(targetScroll) {
-            // BGMのテンポ
             bgSound.volume = 0.8;
 
-            // 文字の色を赤くして揺らす
+            // ★スクロール開始と同時に、すべての中国語を完全に「発狂」させる
             warningTexts.forEach(text => {
-                text.style.color = '#ff0000';
-                text.style.transform = `scale(1.2) translateX(${(Math.random() - 0.5) * 20}px)`;
+                text.classList.add('madness-blink');
             });
 
             // スクロールのアニメーション関数
             function scrollStep() {
                 let current = window.scrollY;
-                // 現在地から降ろす毎フレーム+35px
+                
                 if (current < targetScroll - 10) {
-                    window.scrollTo(0, current + 80);
+                    window.scrollTo(0, current + 60); // 速度を微増
+                    
+                    // スクロール中にリアルタイムで文字をランダムにガタガタ歪ませる
+                    warningTexts.forEach(text => {
+                        let randX = (Math.random() - 0.5) * 40;
+                        let randY = (Math.random() - 0.5) * 10;
+                        let randScale = 0.9 + Math.random() * 0.4;
+                        text.style.transform = `translate(${randX}px, ${randY}px) scale(${randScale})`;
+                    });
+
                     requestAnimationFrame(scrollStep);
                 } else {
-                    // 最下部に到達したら止まる
                     window.scrollTo(0, targetScroll);
                     isAutoScrolling = false;
                     isTriggered = true;
@@ -204,23 +280,27 @@
 
         // ブレーキ後の演出
         function triggerChinaScare() {
-            // BGMを止める
             bgSound.pause();
 
-            // 一瞬だけバイブ
+            // 最下部到達時、発狂をピタッと止めて「完全な静寂と闇」を作る（恐怖のギャップ効果）
+            warningTexts.forEach(text => {
+                text.classList.remove('madness-blink');
+                text.style.color = '#000000'; // 文字を闇に消す
+                text.style.textShadow = 'none';
+                text.style.transform = 'none';
+            });
+
             if (navigator.vibrate) navigator.vibrate(300);
 
-            // 0.8秒の無音
+            // 0.8秒の無音のあと、お札出現
             setTimeout(() => {
                 talisman.style.display = 'block';
                 
-                // ドラの音、笑い声
                 scareSound.volume = 1.0;
                 scareSound.play().catch(e => {});
 
-                // スマホを細かく振動
                 if (navigator.vibrate) navigator.vibrate([100, 100, 100, 100, 100, 100, 500]);
-            }, 800);
+            }, 600);
         }
     </script>
 </body>
