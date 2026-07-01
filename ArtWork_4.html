@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+        
+            background-color: #000000;
+            color: #9c9286;
+            font-family: 'ヒラギノ明朝 ProN', 'Source Han Serif JP', serif;
+            overflow-x: hidden;
+            transition: background-color 0.8s ease;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            box-sizing: border-box;
+        }
+
+        .statue-header {
+            text-align: center;
+            border-bottom: 1px solid #3a1111;
+            padding-bottom: 20px;
+            margin-bottom: 50px;
+        }
+        .statue-header h1 {
+            color: #5e1111;
+            font-size: 22px;
+            letter-spacing: 6px;
+            font-weight: normal;
+            margin: 0;
+        }
+        .statue-header .meta-info {
+            font-size: 12px;
+            color: #4a443c;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+    
+        .work-box {
+            width: 100%;
+            height: 300px;
+            background-color: #0a0a0a;
+            border: 1px solid #1f1414;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #2b2520;
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-bottom: 60px;
+            box-shadow: inset 0 0 30px #000;
+        }
+
+
+        .story-text {
+            font-size: 15px;
+            line-height: 2.5;
+            letter-spacing: 2px;
+            text-align: justify;
+        }
+        .story-text p {
+            margin-bottom: 30px;
+        }
+
+    
+        .abyss-space {
+            height: 120vh; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #222;
+            font-size: 12px;
+            letter-spacing: 8px;
+        }
+
+    
+        .bottom-zone {
+            text-align: center;
+            padding: 100px 0;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+        .bottom-zone.visible {
+            opacity: 1;
+        }
+
+        .warning-call {
+            color: #8c1c1c;
+            font-size: 14px;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+        }
+
+        
+        .return-button {
+            background-color: transparent;
+            border: 1px solid #4a1111;
+            color: #8c1c1c;
+            padding: 15px 40px;
+            font-family: serif;
+            font-size: 14px;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+        .return-button:hover {
+            background-color: #4a1111;
+            color: #000;
+            box-shadow: 0 0 15px #8c1c1c;
+        }
+
+    
+        @keyframes subtle-glitch {
+            0% { transform: translate(0, 0); filter: brightness(1); }
+            50% { transform: translate(2px, -1px); filter: brightness(0.8); }
+            100% { transform: translate(-1px, 1px); filter: brightness(1); }
+        }
+        .glitch-active {
+            animation: subtle-glitch 0.15s 3; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="statue-header">
+            <h1>遺物：「ヒデアキ」</h1>
+            <div class="meta-info">制作：不明 / 発見：1956年</div>
+        </div>
+
+
+        <div class="story-text">
+            <p>texttexttexttexttexttexttexttexttexttexttexttexttexttext</p>
+            <p>texttexttexttexttexttexttexttexttexttexttexttexttexttext</p>
+            <p>texttexttexttexttexttexttexttexttexttexttexttexttexttext</p>
+
+        </div>
+    </div>
+
+
+    <div class="abyss-space">
+
+    </div>
+
+
+    <div class="container bottom-zone" id="bottom-zone">
+        <div class="warning-call">── 既に見られています。</div>
+        <button class="return-button" id="end-btn" onclick="curseAction()">通路へ戻る</button>
+    </div>
+
+    <audio id="ambient-dark" src="low_drone.mp3" preload="auto" loop></audio>
+
+    <script>
+        const bottomZone = document.getElementById('bottom-zone');
+        const endBtn = document.getElementById('end-btn');
+        const ambient = document.getElementById('ambient-dark');
+
+        window.addEventListener('scroll', function() {
+            let maxScroll = document.body.offsetHeight - window.innerHeight;
+            let currentScroll = window.scrollY;
+            let scrollPercent = currentScroll / maxScroll;
+
+            let r = Math.floor(scrollPercent * 33);
+            let g = Math.floor(scrollPercent * 2);
+            let b = Math.floor(scrollPercent * 2);
+            document.body.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+
+    
+            if (currentScroll > 100) {
+                ambient.volume = Math.min(scrollPercent, 0.7);
+                ambient.play().catch(e => {});
+            }
+
+    
+            if (scrollPercent > 0.9) {
+                bottomZone.classList.add('visible');
+            }
+        });
+
+    
+        function curseAction() {
+            document.body.classList.add('glitch-active');
+            
+            
+            setTimeout(() => {
+                document.body.classList.remove('glitch-active');
+                alert('……戻れません。');
+            }, 450);
+        }
+    </script>
+</body>
+</html>
