@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遺構調査：鉄像</title>
+    <style>
+        body {
+            margin: 0; padding: 0;
+            background-color: #080706; color: #7a7065;
+            font-family: serif; overflow-x: hidden;
+            user-select: none;
+        }
+
+        .container {
+            max-width: 500px; margin: 0 auto; padding: 40px 20px;
+        }
+
+        .cn-header {
+            text-align: center; border-bottom: 2px solid #4a0d0d; padding-bottom: 15px; margin-bottom: 40px;
+        }
+        .cn-header h1 { color: #8c1c1c; font-size: 22px; margin: 0; letter-spacing: 4px; }
+
+        .statue-box {
+            width: 100%; height: 280px; background-color: #000; border: 1px solid #2d1414;
+            display: flex; justify-content: center; align-items: center; color: #222; margin-bottom: 40px;
+        }
+
+        .story { font-size: 15px; line-height: 2.2; letter-spacing: 1px; }
+
+        /* ーーー 画面をハックする弾幕・エラー用のスタイル ーーー */
+        /* 最前面で画面を埋め尽くす呪いの文字 */
+        .curse-particle {
+            position: fixed; pointer-events: none; z-index: 9999;
+            color: #b30000; font-weight: bold; font-size: 28px;
+            text-shadow: 0 0 8px rgba(0,0,0,1);
+            animation: text-float 1.5s linear forwards;
+        }
+        @keyframes text-float {
+            0% { transform: translateY(100vh) scale(0.8); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5) rotate(10deg); opacity: 0; }
+        }
+
+        /* 偽のシステムエラー画面 */
+        #error-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000; z-index: 100000; box-sizing: border-box; padding: 40px 20px;
+            font-family: monospace; color: #ff3333; font-size: 14px; line-height: 1.8;
+        }
+        .error-box {
+            border: 1px solid #ff3333; padding: 20px; background-color: #100000; box-shadow: 0 0 20px #500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="cn-header">
+            <h1>特級遺物：「 万人坑の鉄像 」</h1>
+        </div>
+
+        <div class="statue-box">【 ここに中国の不気味な銅像画像 】</div>
+
+        <div class="story">
+            <p>この鋳鉄像の周囲では、不可解な電磁波の乱れが観測されています。</p>
+            <p>特に、デジタル機器を近づけた場合、端末の制御システムそのものが何かに『侵食』され、意図しない挙動を始める危険性が指摘されています。</p>
+            <p>もしあなたの画面に異変が生じた場合は、直ちにブラウザを閉じてください。そのまま操作を続けると、端末のデータ、あるいはあなた自身の──</p>
+        </div>
+        
+        <!-- 罠のための余白 -->
+        <div style="height: 60vh;"></div>
+    </div>
+
+    <!-- 偽のエラー画面 -->
+    <div id="error-overlay">
+        <div class="error-box">
+            <p>[CRITICAL_SYSTEM_ERROR] CODE: 0x004F6E</p>
+            <p>----------------------------------------</p>
+            <p>警告: 不明なスクリプトによる端末の占有を検知しました。</p>
+            <p>メモリアロケーションの破壊が進行しています。</p>
+            <p>戻れません。戻れません。戻れません。</p>
+            <p>留下来 留下来 留下来 留下来 留下来</p>
+            <p>死期已至 死期已至 死期已至 死期已至</p>
+            <p>----------------------------------------</p>
+            <p>STATUS: FATAL_OVERFLOW_SHUTDOWN...</p>
+        </div>
+    </div>
+
+    <!-- 衝撃音（エラー発生時のノイズ音など） -->
+    <audio id="glitch-sound" src="error_noise.mp3" preload="auto"></audio>
+
+    <script>
+        let isHacked = false;
+        const errorOverlay = document.getElementById('error-overlay');
+        const glitchSound = document.getElementById('glitch-sound');
+        const words = ["冤", "留下来", "死期已至", "看見了", "命終"];
+
+        window.addEventListener('scroll', function() {
+            let maxScroll = document.body.offsetHeight - window.innerHeight;
+            let currentScroll = window.scrollY;
+
+            // スクロールが全体の半分（50%）を超えたら、ハッキングイベント開始
+            if (currentScroll > maxScroll * 0.5 && !isHacked) {
+                isHacked = true;
+                startHacking();
+            }
+        });
+
+        function startHacking() {
+            // 音声再生とバイブレーション（ガガガッと細かく震える）
+            glitchSound.volume = 1.0;
+            glitchSound.play().catch(() => {});
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 300, 50, 300]);
+
+            // 1. スクロールの完全な狂い（上下一転・強制スクロール）
+            let glitchInterval = setInterval(() => {
+                // 指の操作を無視して、勝手に上下に超高速で画面を揺さぶる
+                let randomTarget = window.scrollY + (Math.random() > 0.5 ? 150 : -150);
+                window.scrollTo(0, randomTarget);
+            }, 30);
+
+            // 2. 文字弾幕の湧き出し
+            let textInterval = setInterval(() => {
+                const span = document.createElement('span');
+                span.className = 'curse-particle';
+                span.innerText = words[Math.floor(Math.random() * words.length)];
+                span.style.left = Math.random() * 80 + 10 + 'vw';
+                document.body.appendChild(span);
+                
+                // 1.5秒後に生成した文字を消す（メモリ対策）
+                setTimeout(() => span.remove(), 1500);
+            }, 70);
+
+            // 3. 3.5秒後、完全に手遅れになって偽のエラー画面でジャックする
+            setTimeout(() => {
+                clearInterval(glitchInterval);
+                clearInterval(textInterval);
+                errorOverlay.style.display = 'block';
+                
+                // トドメの長いバイブレーション
+                if (navigator.vibrate) navigator.vibrate(2000);
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
