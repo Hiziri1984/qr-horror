@@ -76,7 +76,7 @@
         }
 
         /*ジャンプスケア用*/
-                #jumpscare-screen {
+        #jumpscare-screen {
             display: none; /* 初期は非表示 */
             position: fixed;
             top: 0; left: 0;
@@ -114,31 +114,23 @@
             <div class="area-tag">Created: John Mathias / 1982: 遺品回収</div>
         </div>
 
-        <!-- <div class="work-box">
-            【 作品画像  】
-        </div> -->
-
         <div class="story-text">
             <p>澤本伊吹の遺作</p>
             <p>伊吹が死の間際に描いたといわれる作品。享年21歳。<br>死の淵を見た伊吹は大きな雄たけびをあげ、自らの歯をすべてむしり取り貪り食ったという。</p>
-            <p>以下伊吹の遺言「ここはAブロックということで、まあ、僕アルティメットやってるんですけど、このオレンジ色のアルティメット持ってきました、、。」<br>まあ、アルティメットの頭文字は"U"なんですけどね、、へへへ、。</p>
+            <p>その姿を見たものは伊吹のあまりの滑稽さに笑いが止まらなかったという。</p>
         </div>
 
         <div class="scroll-trigger">
             ▼ MORE DETAILS (スクロールして詳細を展開)
         </div>
 
-        <!-- 罠：スクロールを引き延ばすための余白 -->
         <div style="height: 30vh;"></div>
     </div>
 
-    <!-- ジャンプスケア画面 -->
     <div id="jumpscare-screen">
-        <!-- ★ここにネットで見つけた和ホラー画像のURLをそのまま貼り付けてください！ -->
         <img class="scare-image" src="https://images.unsplash.com/photo-1509248961158-e54f6934749c?q=80&w=600" alt="CURSE">
     </div>
 
-    <!-- 音声：和風の大音量ホラー効果音（ふすまが壊れる音、女の悲鳴など） -->
     <audio id="curse-scream" src="jp_scream.mp3" preload="auto"></audio>
 
     <script>
@@ -150,8 +142,8 @@
             let maxScroll = document.body.offsetHeight - window.innerHeight;
             let currentScroll = window.scrollY;
 
-            // 作品紹介を読んで、少し下に進んだ瞬間（全体の35%）にノーモーションで暴発！
-            if (currentScroll > maxScroll * 0.50) {
+            // 元の35%～50%あたりのタイミングに戻しています
+            if (currentScroll > maxScroll * 0.35) {
                 if (!isScared) {
                     isScared = true;
                     executeJumpScare();
@@ -172,6 +164,22 @@
             if (navigator.vibrate) {
                 navigator.vibrate([100, 50, 100, 50, 500, 50, 500, 50, 1500]);
             }
+
+            // 【新規追加】指定時間（1200ミリ秒 = 1.2秒）が経過したら演出を終了させる
+            setTimeout(function() {
+                // 恐怖画面を非表示にする
+                scareScreen.style.display = 'none';
+                scareScreen.classList.remove('curse-active');
+                
+                // 音声を停止して巻き戻す
+                screamSound.pause();
+                screamSound.currentTime = 0;
+
+                // バイブレーションがまだ動いていれば強制停止
+                if (navigator.vibrate) {
+                    navigator.vibrate(0);
+                }
+            }, 400); // ←ここの数値を小さくすると、さらに表示時間が短くなります（例: 800 で0.8秒）
         }
     </script>
 </body>
