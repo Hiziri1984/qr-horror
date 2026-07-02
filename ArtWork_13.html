@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>,まだできてない</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #050404; /* 重い黒 */
+            color: #8c7a70; /* くすんだベージュ */
+            font-family: 'Courier Prime', monospace;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* 左右にうっすら潜む絵の影 */
+        .background-shroud {
+            position: absolute;
+            top: 50%;
+            width: 28vw;
+            max-width: 260px;
+            height: 80vh;
+            background-image: url('hoge.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(1) contrast(1.6) brightness(0.15); 
+            opacity: 0.25;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .left-bg { left: 3vw; transform: translateY(-50%); }
+        .right-bg { right: 3vw; transform: translateY(-50%) scaleX(-1); }
+
+        /* 中央のメッセージボード */
+        .maintenance-box {
+            max-width: 400px;
+            width: 85%;
+            background-color: #0c0a09;
+            border: 1px solid #241c18;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            position: relative;
+            z-index: 10;
+        }
+
+        .message {
+            font-size: 11pt;
+            line-height: 1.8;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .accent-text {
+            color: #8a2b2b; /* 鈍い赤 */
+            font-weight: bold;
+        }
+
+        /* ゆっくり明滅するライン */
+        .pulse-line {
+            width: 60px;
+            height: 2px;
+            background-color: #4a1414;
+            margin: 0 auto;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-shroud left-bg"></div>
+    <div class="background-shroud right-bg"></div>
+
+    <div class="maintenance-box">
+        <div class="message">
+            あとでやります<br>
+            最近<span class="accent-text">伊吹</span>にため口使っても何も言われなくなりました。<br><br>
+            多分呆れられました。この間伊吹ちょろいとか国家の犬とか言ってごめんだわん🐶
+        </div>
+        <div class="pulse-line"></div>
+    </div>
+
+</body>
+</html>
