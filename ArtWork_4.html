@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>遺物：「ヒデアキ」</title>
     <style>
         
         html {
@@ -48,9 +48,11 @@
         }
 
     
+        /* ★ 画像を綺麗に収めるために、少し調整 */
         .work-box {
             width: 100%;
-            height: 300px;
+            height: auto;
+            max-height: 400px;
             background-color: #0a0a0a;
             border: 1px solid #1f1414;
             display: flex;
@@ -61,6 +63,15 @@
             letter-spacing: 2px;
             margin-bottom: 60px;
             box-shadow: inset 0 0 30px #000;
+            overflow: hidden;
+            padding: 10px;
+        }
+        .work-box img {
+            width: 100%;
+            height: auto;
+            max-height: 380px;
+            object-fit: contain;
+            display: block;
         }
 
 
@@ -137,14 +148,17 @@
     <div class="container">
 
         <div class="statue-header">
-            <h1>遺物：「ヒデアキ」</h1>
+            <h1>作品：「　　」</h1>
             <div class="meta-info">制作：不明 / 発見：1956年</div>
         </div>
 
+        <!-- ★ 作品の画像を表示するエリアを追加 -->
+        <div class="work-box">
+            <img src="China.jpg" alt="遺物画像">
+        </div>
 
         <div class="story-text">
-            <p>ここ</p>
-
+            <p>ここだれかお願いします</p>
         </div>
     </div>
 
