@@ -21,9 +21,28 @@
         }
         .cn-header h1 { color: #8c1c1c; font-size: 22px; margin: 0; letter-spacing: 4px; }
 
+        /* ★ 画像が綺麗に中央に収まるようにCSSを調整 */
         .statue-box {
-            width: 100%; height: 280px; background-color: #000; border: 1px solid #2d1414;
-            display: flex; justify-content: center; align-items: center; color: #222; margin-bottom: 40px;
+            width: 100%;
+            height: auto;
+            max-height: 350px;
+            background-color: #000;
+            border: 1px solid #2d1414;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #222;
+            margin-bottom: 40px;
+            overflow: hidden;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .statue-box img {
+            width: 100%;
+            height: auto;
+            max-height: 330px;
+            object-fit: contain;
+            display: block;
         }
 
         .story { font-size: 15px; line-height: 2.2; letter-spacing: 1px; }
@@ -60,28 +79,27 @@
             <h1>：「  」</h1>
         </div>
 
-        <div class="statue-box">【  】</div>
+        <div class="statue-box">
+            <img src="eyes.jpg" alt="作品画像">
+        </div>
 
         <div class="story">
-            <p>ここ</p>
-
+            <p>ここも</p>
         </div>
         
-        <!-- 罠のための余白 -->
         <div style="height: 60vh;"></div>
     </div>
 
-    <!-- 偽のエラー画面 -->
     <div id="error-overlay">
         <div class="error-box">
             <p>[CRITICAL_SYSTEM_ERROR] CODE: 0x004F6E</p>
             <p>----------------------------------------</p>
-            <p>不明なスクリプトによる端末の占有を検知しました。</p>
-            <p>メモリアロケーション破壊が進行しています。</p>
+            <p>何者かによる視線を検知しました。</p>
+            <p>決して目を合わせないでください。</p>
             <p>警告</p>
             <p>直ちにブラウザを閉じてください</p>
             <p>----------------------------------------</p>
-            <p>STATUS: FATAL_OVERFLOW_SHUTDOWN...</p>
+            <p>STATUS: DON'T LOOK AROUND</p>
         </div>
     </div>
 
