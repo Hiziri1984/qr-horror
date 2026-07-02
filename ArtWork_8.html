@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM_ERROR // ACCESS_DENIED</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #020202;
+            color: #7a6e67;
+            font-family: 'Courier Prime', monospace;
+            overflow-x: hidden;
+            min-height: 250vh; /* 侵食を味わうために少し長めに設定 */
+            position: relative;
+        }
+
+        /* -------------------------------------------
+           ★ 左右の背景：モノクロだが、スクロールで徐々に濃く・巨大化する
+        ------------------------------------------- */
+        .side-sculpture {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%) scale(1);
+            width: 25vw;
+            max-width: 240px;
+            height: 75vh;
+            background-image: url('hoge.jpg');
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #1c1510;
+            z-index: 1;
+            filter: grayscale(1) contrast(1.8) brightness(0.3); 
+            opacity: 0.4;
+            pointer-events: none;
+            transition: all 0.3s ease-out;
+        }
+        .left-side { left: 1vw; }
+        .right-side { right: 1vw; }
+
+        /* 中央の解説エリア */
+        .main-content {
+            max-width: 46vw;
+            margin: 0 auto;
+            padding: 100px 0 200px 0;
+            text-align: justify;
+            position: relative;
+            z-index: 5;
+            transition: filter 0.2s;
+        }
+
+        .document-header {
+            border-bottom: 1px solid #29201a;
+            padding-bottom: 20px;
+            margin-bottom: 50px;
+        }
+
+        .main-title {
+            font-size: 16pt;
+            letter-spacing: 2px;
+            font-weight: bold;
+            color: #a69588;
+        }
+
+        /* ★ 中央のメイン画像：カラー（ここもスクロールで色調が狂う） */
+        .work-photo-frame {
+            width: 100%;
+            max-width: 460px;
+            margin: 0 auto 50px auto;
+            border: 1px solid #29201a;
+            background-color: #0a0807;
+            padding: 10px;
+            transition: transform 0.2s, filter 0.2s;
+        }
+        .work-photo-frame img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .description-paragraph {
+            font-size: 11pt;
+            line-height: 1.9;
+            margin-bottom: 35px;
+            color: #94857b;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        /* -------------------------------------------
+           ★ スクロールで発動する最悪のバグ・侵食演出
+        ------------------------------------------- */
+        
+        /* 画面全体が赤黒く、かつ激しく色反転・バグる */
+        body.corrupted-stage-1 {
+            background-color: #0a0000;
+            color: #b37d7d;
+        }
+        body.corrupted-stage-1 .main-title {
+            color: #ff3333;
+        }
+
+        /* 文字がバラバラに崩壊するアニメーション（激しいブレ） */
+        .glitch-text {
+            animation: text-glitch 0.15s infinite steps(2);
+            color: #ff4d4d !important;
+            text-shadow: 2px 0 #00ffff, -2px 0 #ff00ff;
+        }
+        @keyframes text-glitch {
+            0% { transform: translate(2px, -1px); filter: blur(0px); }
+            50% { transform: translate(-2px, 2px); filter: blur(1px); }
+            100% { transform: translate(1px, 1px); filter: blur(0px); }
+        }
+
+        /* -------------------------------------------
+           ★ 最終侵食：画面全体を覆い尽くす巨大な「歯と顔」
+        ------------------------------------------- */
+        .fullscreen-contamination {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('hoge.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: 10000;
+            display: none;
+            /* フルカラーのまま、どす黒い赤のフィルターをかける */
+            filter: contrast(3) brightness(0.2) saturate(2) sepia(1) hue-rotate(-50deg);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* 最下部用の警告表示 */
+        .terminal-alert {
+            font-weight: bold;
+            color: #ff0000;
+            text-align: center;
+            margin-top: 100px;
+            font-size: 14pt;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 画面全体をじわじわと乗っ取る巨大な絵の影 -->
+    <div class="fullscreen-contamination" id="contaminationBg"></div>
+
+    <!-- 左右の背景（スクロールで中央に向かって迫ってくる） -->
+    <div class="side-sculpture left-side" id="leftArt"></div>
+    <div class="side-sculpture right-side" id="rightArt"></div>
+
+    <!-- メインテキスト -->
+    <div class="main-content" id="mainContent">
+        <div class="document-header">
+            <div class="main-title" id="pageTitle">> ANALYSIS_REPORT // CODE: HOGE</div>
+        </div>
+        
+        <div class="work-photo-frame" id="mainPhotoFrame">
+            <img src="hoge.jpg" alt="Target Canvas">
+        </div>
+
+        <div class="description-paragraph" id="p1">
+            The entity captured within the frame exhibits an aggressive spatial distortion. Upon initial viewing, the yellow profile on the right appears to dominate the visual landscape, extending its lower jaw to an unnatural capacity.
+        </div>
+
+        <div class="description-paragraph" id="p2">
+            As the observer continuous to analyze the details, the geometric boundaries of the canvas begin to lose stability. It is highly advised not to lock eyes with the central pupil for more than forty seconds.
+        </div>
+
+        <div class="description-paragraph" id="p3">
+            Warning: Digital artifacts have been reported during the rendering of this specific dataset. The architecture of the document might decay during long-form exposure.
+        </div>
+
+        <div class="description-paragraph" id="p4">
+            If you experience visual displacement or perceive the background layers shifting closer toward the text columns, terminate the connection immediately.
+        </div>
+        
+        <div class="terminal-alert" id="alertText">
+            !! FATAL OVERFLOW DETECTED !!<br>
+            THE MOUTH IS OPENING.
+        </div>
+    </div>
+
+    <script>
+        const leftArt = document.getElementById('leftArt');
+        const rightArt = document.getElementById('rightArt');
+        const mainContent = document.getElementById('mainContent');
+        const mainPhotoFrame = document.getElementById('mainPhotoFrame');
+        const contaminationBg = document.getElementById('contaminationBg');
+        const alertText = document.getElementById('alertText');
+        
+        const p2 = document.getElementById('p2');
+        const p3 = document.getElementById('p3');
+        const p4 = document.getElementById('p4');
+
+        window.addEventListener('scroll', () => {
+            const sY = window.scrollY;
+
+            // 1. スクロールするほど、左右の背景の「歯と顔」が巨大化し、中央の文字へ向かって迫ってくる
+            const scaleValue = 1 + (sY / 600);
+            const moveValue = Math.min(sY / 15, 12); // 中央へ寄る
+            
+            leftArt.style.transform = `translateY(-50%) scale(${scaleValue})`;
+            leftArt.style.left = `${1 + moveValue}vw`;
+            leftArt.style.filter = `grayscale(1) contrast(${1.8 + sY/500}) brightness(${0.3 + sY/2000})`;
+
+            rightArt.style.transform = `translateY(-50%) scale(${scaleValue})`;
+            rightArt.style.right = `${1 + moveValue}vw`;
+            rightArt.style.filter = `grayscale(1) contrast(${1.8 + sY/500}) brightness(${0.3 + sY/2000})`;
+
+            // 2. スクロール中盤（狂気ステージ1）: 背景が赤黒くなり、文字が壊れ始める
+            if (sY > 200) {
+                document.body.classList.add('corrupted-stage-1');
+                p2.classList.add('glitch-text');
+            } else {
+                document.body.classList.remove('corrupted-stage-1');
+                p2.classList.remove('glitch-text');
+            }
+
+            if (sY > 400) {
+                p3.classList.add('glitch-text');
+                mainPhotoFrame.style.transform = `scale(${1 + (sY-400)/1000}) rotate(${(sY-400)/50}deg)`;
+                mainPhotoFrame.style.filter = `hue-rotate(${sY}deg) contrast(2)`;
+            } else {
+                p3.classList.remove('glitch-text');
+                mainPhotoFrame.style.transform = 'scale(1) rotate(0deg)';
+                mainPhotoFrame.style.filter = 'none';
+            }
+
+            // 3. スクロール終盤（狂気ステージ2）: 画面全体が絵そのものに飲み込まれていく
+            if (sY > 600) {
+                p4.classList.add('glitch-text');
+                alertText.style.display = 'block';
+                
+                // 背景の巨大化・不透明度アップ
+                contaminationBg.style.display = 'block';
+                const opacityValue = Math.min((sY - 600) / 400, 0.85); // 最大85%まで画面を覆う
+                contaminationBg.style.opacity = opacityValue;
+                
+                // 中央のコンテンツ全体を歪ませる
+                mainContent.style.filter = `blur(${(sY-600)/100}px) invert(${(sY-600)/600})`;
+            } else {
+                p4.classList.remove('glitch-text');
+                alertText.style.display = 'none';
+                contaminationBg.style.display = 'none';
+                contaminationBg.style.opacity = 0;
+                mainContent.style.filter = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
